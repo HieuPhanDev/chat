@@ -6,24 +6,24 @@ const compression = require('compression')
 const fileUpload = require('express-fileupload')
 const cors = require('cors')
 const createHttpError = require('http-errors')
+const { Server } = require('socket.io')
 
 require('dotenv').config()
 
-const logger = require('./configs/logger.config')
 const routes = require('./routes/index.route')
 const { default: mongoose } = require('mongoose')
 
 const app = express()
 
 mongoose.connection.on('error', (err) => {
-  logger.error(`Mongodb connection error : ${err}`)
+  console.log(`Mongodb connection error : ${err}`)
   process.exit(1)
 })
 if (process.env.NODE_ENV !== 'production') {
   mongoose.set('debug', true)
 }
 mongoose.connect(process.env.DATABASE_URL, {}).then(() => {
-  logger.info('Connected to Mongodb.')
+  console.log('Connected to Mongodb.')
 })
 
 if (process.env.NODE_ENV === 'development') {
@@ -64,12 +64,22 @@ const PORT = process.env.PORT || 8000
 let server
 
 server = app.listen(PORT, () => {
-  logger.info(`Example app listening on port ${PORT}`)
+  console.log(`Example app listening on port ${PORT}`)
+})
+
+const io = new Server(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: process.env.CLIENT_ENDPOINT,
+  },
+})
+io.on('connection', (socket) => {
+  console.log('socket io connected successfully.')
 })
 
 const exitHandler = () => {
   if (server) {
-    logger.info('Server closed.')
+    console.log('Server closed.')
     process.exit(1)
   } else {
     process.exit(1)
@@ -77,7 +87,7 @@ const exitHandler = () => {
 }
 
 const unexpectedErrorHandler = (error) => {
-  logger.error(error)
+  console.log(error)
   exitHandler()
 }
 process.on('uncaughtException', unexpectedErrorHandler)
@@ -86,7 +96,7 @@ process.on('unhandledRejection', unexpectedErrorHandler)
 //SIGTERM
 process.on('SIGTERM', () => {
   if (server) {
-    logger.info('Server closed.')
+    console.log('Server closed.')
     process.exit(1)
   }
 })
