@@ -40,7 +40,7 @@ app.use(fileUpload({ useTempFiles: true }))
 
 app.use(
   cors({
-    origin: process.env.CLIENT_ENDPOINT,
+    origin: [process.env.CLIENT_ENDPOINT, 'https://hieu-chat-halo.onrender.com/'],
     methods: ['POST', 'PUT', 'GET', 'DELETE'],
     credentials: true,
   })
