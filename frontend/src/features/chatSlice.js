@@ -1,8 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
-
-const CONVERSATION_ENDPOINT = `${process.env.REACT_APP_API_ENDPOINT}/conversation`
-const MESSAGE_ENDPOINT = `${process.env.REACT_APP_API_ENDPOINT}/message`
+import axios from '../axios'
 
 const initialState = {
   status: '',
@@ -16,11 +13,7 @@ const initialState = {
 //functions
 export const getConversations = createAsyncThunk('conervsation/all', async (token, { rejectWithValue }) => {
   try {
-    const { data } = await axios.get(CONVERSATION_ENDPOINT, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    const { data } = await axios.get('/conversation')
     return data
   } catch (error) {
     return rejectWithValue(error.response.data.error.message)
@@ -29,17 +22,9 @@ export const getConversations = createAsyncThunk('conervsation/all', async (toke
 export const open_create_conversation = createAsyncThunk(
   'conervsation/open_create',
   async (values, { rejectWithValue }) => {
-    const { token, receiver_id } = values
+    const { receiver_id } = values
     try {
-      const { data } = await axios.post(
-        CONVERSATION_ENDPOINT,
-        { receiver_id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      const { data } = await axios.post('/conversation', { receiver_id })
       return data
     } catch (error) {
       return rejectWithValue(error.response.data.error.message)
@@ -49,13 +34,9 @@ export const open_create_conversation = createAsyncThunk(
 export const getConversationMessages = createAsyncThunk(
   'conervsation/messages',
   async (values, { rejectWithValue }) => {
-    const { token, convo_id } = values
+    const { convo_id } = values
     try {
-      const { data } = await axios.get(`${MESSAGE_ENDPOINT}/${convo_id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      const { data } = await axios.get(`/message/${convo_id}`)
       return data
     } catch (error) {
       return rejectWithValue(error.response.data.error.message)
@@ -63,21 +44,13 @@ export const getConversationMessages = createAsyncThunk(
   }
 )
 export const sendMessage = createAsyncThunk('message/send', async (values, { rejectWithValue }) => {
-  const { token, message, convo_id, files } = values
+  const { message, convo_id, files } = values
   try {
-    const { data } = await axios.post(
-      MESSAGE_ENDPOINT,
-      {
-        message,
-        convo_id,
-        files,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
+    const { data } = await axios.post('/message', {
+      message,
+      convo_id,
+      files,
+    })
     return data
   } catch (error) {
     return rejectWithValue(error.response.data.error.message)
@@ -89,6 +62,21 @@ export const chatSlice = createSlice({
   reducers: {
     setActiveConversation: (state, action) => {
       state.activeConversation = action.payload
+    },
+    updateMessagesAndConversations: (state, action) => {
+      //update messages
+      let convo = state.activeConversation
+      if (convo._id === action.payload.conversation._id) {
+        state.messages = [...state.messages, action.payload]
+      }
+      //update conversations
+      let conversation = {
+        ...action.payload.conversation,
+        latestMessage: action.payload,
+      }
+      let newConvos = [...state.conversations].filter((c) => c._id !== conversation._id)
+      newConvos.unshift(conversation)
+      state.conversations = newConvos
     },
   },
   extraReducers(builder) {
@@ -146,6 +134,6 @@ export const chatSlice = createSlice({
       })
   },
 })
-export const { setActiveConversation } = chatSlice.actions
+export const { setActiveConversation, updateMessagesAndConversations } = chatSlice.actions
 
 export default chatSlice.reducer

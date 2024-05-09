@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../../axios'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { FilterIcon, ReturnIcon, SearchIcon } from '../../svg'
@@ -17,7 +17,7 @@ export default function Search({ searchLength, setSearchResults }) {
         })
         setSearchResults(data)
       } catch (error) {
-        console.log(error.response.data.error.message)
+        console.log(error)
       }
     } else {
       setSearchResults([])

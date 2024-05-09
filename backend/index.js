@@ -7,21 +7,18 @@ const fileUpload = require('express-fileupload')
 const cors = require('cors')
 const createHttpError = require('http-errors')
 const { Server } = require('socket.io')
+const cookies = require('cookie-parser')
 
 require('dotenv').config()
 
 const routes = require('./routes/index.route')
 const { default: mongoose } = require('mongoose')
+const { SocketServer } = require('./SocketServer')
 
 const app = express()
 
-mongoose.connection.on('error', (err) => {
-  console.log(`Mongodb connection error : ${err}`)
-  process.exit(1)
-})
-if (process.env.NODE_ENV !== 'production') {
-  mongoose.set('debug', true)
-}
+app.use(cookies())
+
 mongoose.connect(process.env.DATABASE_URL, {}).then(() => {
   console.log('Connected to Mongodb.')
 })
@@ -41,7 +38,13 @@ app.use(compression())
 
 app.use(fileUpload({ useTempFiles: true }))
 
-app.use(cors())
+app.use(
+  cors({
+    origin: process.env.CLIENT_ENDPOINT,
+    methods: ['POST', 'PUT', 'GET', 'DELETE'],
+    credentials: true,
+  })
+)
 
 app.use('/api/v1', routes)
 
@@ -75,6 +78,7 @@ const io = new Server(server, {
 })
 io.on('connection', (socket) => {
   console.log('socket io connected successfully.')
+  SocketServer(socket, io)
 })
 
 const exitHandler = () => {

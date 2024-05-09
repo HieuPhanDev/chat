@@ -1,10 +1,11 @@
 import { useSelector } from 'react-redux'
 import { DotsIcon, SearchLargeIcon } from '../../svg'
 import { capitalize } from '../../utils/string'
+import { getConversationName, getConversationPicture } from '../../utils/chat'
 
-export default function ChatHeader() {
+export default function ChatHeader({ online }) {
   const { activeConversation } = useSelector((state) => state.chat)
-  const { name, picture } = activeConversation
+  const { user } = useSelector((state) => state.user)
   return (
     <div className="h-[59px] dark:bg-dark_bg_2 flex items-center p16 select-none">
       {/*Container*/}
@@ -13,12 +14,25 @@ export default function ChatHeader() {
         <div className="flex items-center gap-x-4">
           {/*Conversation image*/}
           <button className="btn">
-            <img src={picture} alt={`${name} picture`} className="w-full h-full rounded-full object-cover" />
+            <img
+              src={
+                activeConversation.isGroup
+                  ? activeConversation.picture
+                  : getConversationPicture(user, activeConversation.users)
+              }
+              alt=""
+              className="w-full h-full rounded-full object-cover"
+            />
           </button>
           {/*Conversation name and online status*/}
-          <div className="flex flex-col">
-            <h1 className="dark:text-white text-md font-bold">{capitalize(name.split(' ')[0])}</h1>
-            <span className="text-xs dark:text-dark_svg_2">online</span>
+          <div className="flex flex-col relative">
+            <h1 className="dark:text-white text-md font-bold">
+              {activeConversation.isGroup
+                ? activeConversation.name
+                : capitalize(getConversationName(user, activeConversation.users).split(' ').pop())}
+            </h1>
+            <span className="text-xs dark:text-dark_svg_2 ">{online ? 'online' : ''}</span>
+            <div className="absolute bottom-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white z-10 right-12"></div>
           </div>
         </div>
         {/*Right*/}

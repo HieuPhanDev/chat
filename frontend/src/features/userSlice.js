@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
+import axios from '../axios'
 
-const AUTH_ENDPOINT = `${process.env.REACT_APP_API_ENDPOINT}/auth`
+// const AUTH_ENDPOINT = `${process.env.REACT_APP_API_ENDPOINT}/auth`
 
 const initialState = {
   status: '',
@@ -18,7 +18,7 @@ const initialState = {
 
 export const registerUser = createAsyncThunk('auth/register', async (values, { rejectWithValue }) => {
   try {
-    const { data } = await axios.post(`${AUTH_ENDPOINT}/register`, {
+    const { data } = await axios.post(`auth/register`, {
       ...values,
     })
     return data
@@ -28,7 +28,7 @@ export const registerUser = createAsyncThunk('auth/register', async (values, { r
 })
 export const loginUser = createAsyncThunk('auth/login', async (values, { rejectWithValue }) => {
   try {
-    const { data } = await axios.post(`${AUTH_ENDPOINT}/login`, {
+    const { data } = await axios.post(`auth/login`, {
       ...values,
     })
     return data

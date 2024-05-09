@@ -5,7 +5,7 @@ import Search from './Search'
 import Conversations from '../conversation/Conversations'
 import SearchResults from './SearchResults'
 
-export default function Sidebar() {
+export default function Sidebar({ onlineUsers, typing }) {
   const [searchResults, setSearchResults] = useState([])
   return (
     <div className="flex0030 max-w-[30%] h-full select-none">
@@ -23,7 +23,7 @@ export default function Sidebar() {
       ) : (
         <>
           {/*Conversations*/}
-          <Conversations />
+          <Conversations onlineUsers={onlineUsers} typing={typing} />
         </>
       )}
     </div>

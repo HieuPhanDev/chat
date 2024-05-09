@@ -1,9 +1,10 @@
 import { dateHandler } from '../../utils/date'
 import { useDispatch, useSelector } from 'react-redux'
 import { open_create_conversation } from '../../features/chatSlice'
-import { getConversationId } from '../../utils/chat'
-
-export default function Conversation({ convo }) {
+import { getConversationId, getConversationName, getConversationPicture } from '../../utils/chat'
+import SocketContext from '../../context/SocketContext'
+import { capitalize } from '../../utils/string'
+function Conversation({ convo, socket, online, typing }) {
   const dispatch = useDispatch()
   const { user } = useSelector((state) => state.user)
   const { activeConversation } = useSelector((state) => state.chat)
@@ -12,8 +13,9 @@ export default function Conversation({ convo }) {
     receiver_id: getConversationId(user, convo.users),
     token,
   }
-  const openConversation = () => {
-    dispatch(open_create_conversation(values))
+  const openConversation = async () => {
+    let newConvo = await dispatch(open_create_conversation(values))
+    socket.emit('join conversation', newConvo.payload._id)
   }
   return (
     <li
@@ -26,24 +28,37 @@ export default function Conversation({ convo }) {
     >
       <div className="relative w-full flex items-center justify-between py-[10px]">
         {/*Left*/}
-        <div className="flex items-center gap-x-3">
+        <div className="flex items-center gap-x-3 relative">
           {/*Conversation user picture*/}
-          <div className="relative min-w-[50px] max-w-[50px] h-[50px] rounded-full overflow-hidden">
-            <img src={convo.picture} alt={convo.name} className="w-full h-full object-cover " />
+          <div className={` min-w-[50px] max-w-[50px] h-[50px] rounded-full overflow-hidden relative`}>
+            <img
+              src={convo.isGroup ? convo.picture : getConversationPicture(user, convo.users)}
+              alt="picture"
+              className="w-full h-full object-cover"
+            />
           </div>
+          {online && (
+            <div className="absolute bottom-0 w-4 h-4 bg-green-500 rounded-full border-2 border-white z-10 left-8"></div>
+          )}
           {/*Conversation name and message*/}
           <div className="w-full flex flex-col">
             {/*Conversation name*/}
-            <h1 className="font-bold flex items-center gap-x-2">{convo.name}</h1>
+            <h1 className="font-bold flex items-center gap-x-2">
+              {convo.isGroup ? convo.name : capitalize(getConversationName(user, convo.users))}
+            </h1>
             {/* Conversation message */}
             <div>
               <div className="flex items-center gap-x-1 dark:text-dark_text_2">
                 <div className="flex-1 items-center gap-x-1 dark:text-dark_text_2">
-                  <p>
-                    {convo.latestMessage?.message.length > 25
-                      ? `${convo.latestMessage?.message.substring(0, 25)}...`
-                      : convo.latestMessage?.message}
-                  </p>
+                  {typing === convo._id ? (
+                    <p className="text-green_1">Typing...</p>
+                  ) : (
+                    <p>
+                      {convo.latestMessage?.message.length > 25
+                        ? `${convo.latestMessage?.message.substring(0, 25)}...`
+                        : convo.latestMessage?.message}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -59,3 +74,8 @@ export default function Conversation({ convo }) {
     </li>
   )
 }
+const ConversationWithContext = (props) => (
+  <SocketContext.Consumer>{(socket) => <Conversation {...props} socket={socket} />}</SocketContext.Consumer>
+)
+
+export default ConversationWithContext
