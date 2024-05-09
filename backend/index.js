@@ -38,7 +38,13 @@ app.use(compression())
 
 app.use(fileUpload({ useTempFiles: true }))
 
-app.use(cors())
+app.use(
+  cors({
+    origin: 'https://hieu-chat-halo.onrender.com/',
+    methods: ['POST', 'PUT', 'GET', 'DELETE'],
+    credentials: true,
+  })
+)
 
 app.use('/api/v1', routes)
 
