@@ -17,6 +17,13 @@ const { SocketServer } = require('./SocketServer')
 
 const app = express()
 
+app.use(
+  cors({
+    origin: process.env.CLIENT_ENDPOINT,
+    methods: ['POST', 'PUT', 'GET', 'DELETE'],
+    credentials: true,
+  })
+)
 app.use(cookies())
 
 mongoose.connect(process.env.DATABASE_URL, {}).then(() => {
@@ -37,15 +44,6 @@ app.use(mongoSanitize())
 app.use(compression())
 
 app.use(fileUpload({ useTempFiles: true }))
-
-app.use(
-  cors({
-    origin: '*',
-    methods: ['POST', 'PUT', 'GET', 'DELETE'],
-    credentials: true,
-    allowedHeaders: ['my-custom-header'],
-  })
-)
 
 app.use('/api/v1', routes)
 
