@@ -74,6 +74,7 @@ const io = new Server(server, {
   pingTimeout: 60000,
   cors: {
     origin: process.env.CLIENT_ENDPOINT,
+    credentials: true,
   },
 })
 io.on('connection', (socket) => {
