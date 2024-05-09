@@ -40,9 +40,10 @@ app.use(fileUpload({ useTempFiles: true }))
 
 app.use(
   cors({
-    origin: 'https://hieu-chat-halo.onrender.com/',
+    origin: '*',
     methods: ['POST', 'PUT', 'GET', 'DELETE'],
     credentials: true,
+    allowedHeaders: ['my-custom-header'],
   })
 )
 
@@ -74,8 +75,8 @@ const io = new Server(server, {
   pingTimeout: 60000,
   cors: {
     origin: '*',
-    methods: ["GET", "POST"],
-    allowedHeaders: ["my-custom-header"],
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['my-custom-header'],
     credentials: true,
   },
 })
