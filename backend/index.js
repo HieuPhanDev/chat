@@ -8,32 +8,26 @@ const cors = require('cors')
 const createHttpError = require('http-errors')
 const { Server } = require('socket.io')
 const cookies = require('cookie-parser')
+const { default: mongoose } = require('mongoose')
 
 require('dotenv').config()
 
 const routes = require('./routes/index.route')
-const { default: mongoose } = require('mongoose')
 const { SocketServer } = require('./SocketServer')
 
 const app = express()
-app.use(function (req, res, next) {
-  // res.header("Access-Control-Allow-Origin", "*");
-  const allowedOrigins = ['http://localhost:3000', 'https://hieu-chat-halo.onrender.com/']
-  const origin = req.headers.origin
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin)
-  }
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
-  res.header('Access-Control-Allow-credentials', true)
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, UPDATE')
-  next()
-})
+
 app.use(
   cors({
     origin: ['http://localhost:3000', 'https://hieu-chat-halo.onrender.com/'],
     credentials: true,
   })
 )
+// app.use(function (req, res, next) {
+//   res.header('Access-Control-Allow-Origin', '*')
+//   res.header('Access-Control-Allow-Headers', 'X-Requested-With')
+//   next()
+// })
 app.use(cookies())
 
 mongoose.connect(process.env.DATABASE_URL, {}).then(() => {
