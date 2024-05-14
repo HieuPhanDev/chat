@@ -19,7 +19,7 @@ const app = express()
 
 app.use(
   cors({
-    origin: ['http://localhost:3000', 'https://hieu-chat-halo.onrender.com/'],
+    origin: ['http://localhost:3000', 'https://hieu-chat-halo.onrender.com/', 'https://chat-theta-taupe.vercel.app/'],
     credentials: true,
   })
 )
@@ -76,7 +76,7 @@ server = app.listen(PORT, () => {
 const io = new Server(server, {
   pingTimeout: 60000,
   cors: {
-    origin: ['http://localhost:3000', 'https://hieu-chat-halo.onrender.com'],
+    origin: ['http://localhost:3000', 'https://hieu-chat-halo.onrender.com', 'https://chat-theta-taupe.vercel.app/'],
     credentials: true,
   },
 })
