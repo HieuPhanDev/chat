@@ -28,7 +28,12 @@ app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, UPDATE')
   next()
 })
-app.use(cors())
+app.use(
+  cors({
+    origin: ['http://localhost:3000', 'https://halo-api-6siy.onrender.com'],
+    credentials: true,
+  })
+)
 app.use(cookies())
 
 mongoose.connect(process.env.DATABASE_URL, {}).then(() => {
@@ -77,9 +82,7 @@ server = app.listen(PORT, () => {
 const io = new Server(server, {
   pingTimeout: 60000,
   cors: {
-    origin: '*',
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['my-custom-header'],
+    origin: ['http://localhost:3000', 'https://halo-api-6siy.onrender.com'],
     credentials: true,
   },
 })
