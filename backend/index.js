@@ -82,7 +82,7 @@ server = app.listen(PORT, () => {
 const io = new Server(server, {
   pingTimeout: 60000,
   cors: {
-    origin: ['http://localhost:3000', 'https://halo-api-6siy.onrender.com'],
+    origin: ['http://localhost:3000', 'https://hieu-chat-halo.onrender.com'],
     credentials: true,
   },
 })
