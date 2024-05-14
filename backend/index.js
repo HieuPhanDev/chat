@@ -18,7 +18,7 @@ const { SocketServer } = require('./SocketServer')
 const app = express()
 app.use(function (req, res, next) {
   // res.header("Access-Control-Allow-Origin", "*");
-  const allowedOrigins = ['http://localhost:3000', 'https://halo-api-6siy.onrender.com']
+  const allowedOrigins = ['http://localhost:3000', 'https://hieu-chat-halo.onrender.com/']
   const origin = req.headers.origin
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin)
@@ -30,7 +30,7 @@ app.use(function (req, res, next) {
 })
 app.use(
   cors({
-    origin: ['http://localhost:3000', 'https://halo-api-6siy.onrender.com'],
+    origin: ['http://localhost:3000', 'https://hieu-chat-halo.onrender.com/'],
     credentials: true,
   })
 )
