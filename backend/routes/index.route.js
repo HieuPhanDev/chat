@@ -1,14 +1,16 @@
-const express = require('express')
 const authRoutes = require('./auth.route.js')
 const userRoutes = require('./user.route.js')
 const ConversationRoutes = require('./conversation.route.js')
 const MessageRoutes = require('./message.route.js')
+const { notFound, errHandler } = require('../middlewares/errHandle')
 
-const router = express.Router()
+const route = (app) => {
+  app.use('/auth', authRoutes)
+  app.use('/user', userRoutes)
+  app.use('/conversation', ConversationRoutes)
+  app.use('/message', MessageRoutes)
+  app.use(notFound)
+  app.use(errHandler)
+}
 
-router.use('/auth', authRoutes)
-router.use('/user', userRoutes)
-router.use('/conversation', ConversationRoutes)
-router.use('/message', MessageRoutes)
-
-module.exports = router
+module.exports = route
