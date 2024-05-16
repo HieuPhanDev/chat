@@ -14,7 +14,7 @@ function App() {
     <div className="dark">
       <SocketContext.Provider value={socket}>
         <Routes>
-          <Route exact path="/" element={<Home socket={socket} />} />
+          <Route exact path="/" element={token ? <Home socket={socket} /> : <Navigate to={'/login'} />} />
           <Route exact path="/login" element={!token ? <Login /> : <Navigate to={'/'} />} />
           <Route exact path="/register" element={!token ? <Register /> : <Navigate to={'/'} />} />
         </Routes>

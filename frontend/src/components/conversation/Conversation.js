@@ -33,7 +33,7 @@ function Conversation({ convo, socket, online, typing }) {
           <div className={` min-w-[50px] max-w-[50px] h-[50px] rounded-full overflow-hidden relative`}>
             <img
               src={convo.isGroup ? convo.picture : getConversationPicture(user, convo.users)}
-              alt="picture"
+              alt="pic"
               className="w-full h-full object-cover"
             />
           </div>

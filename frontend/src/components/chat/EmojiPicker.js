@@ -1,5 +1,4 @@
 import EmojiPicker from 'emoji-picker-react'
-import { useEffect, useState } from 'react'
 import { CloseIcon, EmojiIcon } from '../../svg'
 
 export default function EmojiPickerApp({ setMessage, showPicker, setShowPicker, setShowAttachments }) {

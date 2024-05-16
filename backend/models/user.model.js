@@ -21,7 +21,7 @@ const userSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      default: 'Hey there ! I am using Zolo',
+      default: 'Chat with Hiếu',
     },
     password: {
       type: String,

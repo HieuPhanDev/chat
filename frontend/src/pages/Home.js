@@ -13,8 +13,6 @@ function Home({ socket }) {
   const dispatch = useDispatch()
   const { user } = useSelector((state) => state.user)
   const { activeConversation } = useSelector((state) => state.chat)
-
-  //get Conversations
   useEffect(() => {
     socket.emit('join', user._id)
     //get online users
@@ -30,10 +28,6 @@ function Home({ socket }) {
   }, [user])
   const isMounted = useRef(true)
   useEffect(() => {
-    //lsitening to receiving a message
-    // socket.on('receive message', (message) => {
-    //   dispatch(updateMessagesAndConversations(message))
-    // })
     if (isMounted.current) {
       socket.on('receive message', (message) => {
         dispatch(updateMessagesAndConversations(message))
@@ -43,11 +37,11 @@ function Home({ socket }) {
     //listening when a user is typing
     socket.on('typing', (conversation) => setTyping(conversation))
     socket.on('stop typing', () => setTyping(false))
-  }, [])
+  }, [socket, dispatch])
   return (
     <div className="h-screen dark:bg-dark_bg_1 flex items-center justify-center overflow-hidden">
       {/*container*/}
-      <div className="container h-screen flex ">
+      <div className="container h-screen flex w-full">
         {/*Sidebar*/}
         <Sidebar onlineUsers={onlineUsers} typing={typing} />
         {activeConversation._id ? <ChatContainer onlineUsers={onlineUsers} typing={typing} /> : <ChatHome />}

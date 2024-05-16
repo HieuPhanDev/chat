@@ -20,7 +20,6 @@ export default function RegisterForm() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(signUpSchema),
@@ -52,28 +51,22 @@ export default function RegisterForm() {
   return (
     <div className="min-h-screen w-full flex items-center justify-center overflow-hidden">
       {/* Container */}
-      <div className="w-full max-w-md space-y-8 p-10 dark:bg-dark_bg_2 rounded-xl">
+      <div className="w-full max-w-md space-y-2 p-10 dark:bg-dark_bg_2 rounded-xl">
         {/*Heading*/}
         <div className="text-center dark:text-dark_text_1">
-          <h2 className="mt-6 text-3xl font-bold">Welcome</h2>
-          <p className="mt-2 text-sm">Sign up</p>
+          <h2 className="mt-2 text-3xl font-bold">Halo xin chào!</h2>
+          <p className="mt-2 text-2xl">Đăng Kí</p>
         </div>
         {/*Form*/}
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
           <AuthInput
             name="name"
             type="text"
-            placeholder="Full Name"
+            placeholder="Họ và tên"
             register={register}
             error={errors?.name?.message}
           />
-          <AuthInput
-            name="email"
-            type="text"
-            placeholder="Email address"
-            register={register}
-            error={errors?.email?.message}
-          />
+          <AuthInput name="email" type="text" placeholder="Email " register={register} error={errors?.email?.message} />
           <AuthInput
             name="status"
             type="text"
@@ -84,7 +77,7 @@ export default function RegisterForm() {
           <AuthInput
             name="password"
             type="password"
-            placeholder="Password"
+            placeholder="Mật khẩu"
             register={register}
             error={errors?.password?.message}
           />
@@ -103,13 +96,13 @@ export default function RegisterForm() {
           "
             type="submit"
           >
-            {status === 'loading' ? <PulseLoader color="#fff" size={16} /> : 'Sign up'}
+            {status === 'loading' ? <PulseLoader color="#fff" size={16} /> : 'ĐĂNG KÍ'}
           </button>
           {/* Sign in link */}
           <p className="flex flex-col items-center justify-center mt-10 text-center text-md dark:text-dark_text_1">
-            <span>have an account ?</span>
+            <span>Đã có tài khoản ?</span>
             <Link to="/login" className=" hover:underline cursor-pointer transition ease-in duration-300">
-              Sign in
+              Đăng nhập
             </Link>
           </p>
         </form>

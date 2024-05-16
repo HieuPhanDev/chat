@@ -29,17 +29,17 @@ export default function Picture({ readablePicture, setReadablePicture, setPictur
   return (
     <div className="mt-8 content-center dark:text-dark_text_1 space-y-1">
       <label htmlFor="picture" className="text-sm font-bold tracking-wide">
-        Picture (Optional)
+        Ảnh đại diện (Optional)
       </label>
       {readablePicture ? (
         <div>
-          <img src={readablePicture} alt="picture" className="w-20 h-20 object-cover rounded-full" />
+          <img src={readablePicture} alt="pic" className="w-20 h-20 object-cover rounded-full" />
           {/* change pic */}
           <div
             className="mt-2 w-20 py-1 dark:bg-dark_bg_3 rounded-md text-xs font-bold flex items-center justify-center cursor-pointer"
             onClick={() => handleChangePic()}
           >
-            Remove
+            Xóa
           </div>
         </div>
       ) : (
@@ -48,7 +48,7 @@ export default function Picture({ readablePicture, setReadablePicture, setPictur
         "
           onClick={() => inputRef.current.click()}
         >
-          Upload picture
+          Tải ảnh
         </div>
       )}
       <input

@@ -29,22 +29,16 @@ export default function RegisterForm() {
       <div className="w-full max-w-md space-y-8 p-10 dark:bg-dark_bg_2 rounded-xl">
         {/*Heading*/}
         <div className="text-center dark:text-dark_text_1">
-          <h2 className="mt-6 text-3xl font-bold">Welcome back</h2>
-          <p className="mt-2 text-sm">Sign in</p>
+          <h2 className="mt-6 text-3xl font-bold">Halo xin chào!</h2>
+          <p className="mt-2 text-2xl">Đăng Nhập</p>
         </div>
         {/*Form*/}
         <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-6">
-          <AuthInput
-            name="email"
-            type="text"
-            placeholder="Email address"
-            register={register}
-            error={errors?.email?.message}
-          />
+          <AuthInput name="email" type="text" placeholder="Email" register={register} error={errors?.email?.message} />
           <AuthInput
             name="password"
             type="password"
-            placeholder="Password"
+            placeholder="Mật khẩu"
             register={register}
             error={errors?.password?.message}
           />
@@ -62,13 +56,13 @@ export default function RegisterForm() {
           "
             type="submit"
           >
-            {status === 'loading' ? <PulseLoader color="#fff" size={16} /> : 'Sign in'}
+            {status === 'loading' ? <PulseLoader color="#fff" size={16} /> : 'Đăng nhập'}
           </button>
           {/* Sign in link */}
           <p className="flex flex-col items-center justify-center mt-10 text-center text-md dark:text-dark_text_1">
-            <span>you do not have an account ?</span>
+            <span>Chưa có tài khoản ?</span>
             <Link to="/register" className=" hover:underline cursor-pointer transition ease-in duration-300">
-              Sign up
+              Đăng kí
             </Link>
           </p>
         </form>
